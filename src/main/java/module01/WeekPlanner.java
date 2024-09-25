@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class WeekPlanner {
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
         String[][] schedule = {
                 {"Sunday", "do home work"},
                 {"Monday", "go to course"},
@@ -14,6 +13,11 @@ public class WeekPlanner {
                 {"Friday", "join the meeting"},
                 {"Saturday", "go to cinema"}
         };
+        planner(schedule);
+    }
+
+    public static void planner(String[][] schedule) {
+        Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.print("Enter day: ");
             String day = scan.nextLine().trim().toLowerCase();
