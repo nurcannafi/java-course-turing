@@ -29,15 +29,16 @@ public class NumberGuess {
                 System.out.println("Your number is too big. Please, try again...");
             } else {
                 int[] guessArray = Arrays.copyOf(array, k);
+                Arrays.sort(guessArray);
                 print(name, guessArray);
                 break;
             }
         }
     }
 
-    public static void print(String name, int[] sortedArray) {
+    public static void print(String name, int[] guessArray) {
         System.out.print("Your numbers: ");
-        for (int i : sortedArray) {
+        for (int i : guessArray) {
             System.out.print(i + " ");
         }
         System.out.printf("\nCongratulations, %s!", name);
