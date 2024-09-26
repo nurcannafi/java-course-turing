@@ -11,24 +11,24 @@ public class NumberGuess {
         System.out.print("Enter your name: ");
         String name = scan.next();
         Random random = new Random();
-        int count = random.nextInt(100);
+        int number = random.nextInt(100);
         System.out.println("Let the game begin!");
-        guess(name, count);
+        guess(name, number);
     }
 
-    public static void guess(String name, int count) {
+    public static void guess(String name, int number) {
         int[] array = new int[100];
-        int k = 0;
+        int count = 0;
         while (true) {
             System.out.print("Enter number: ");
             int enterNumber = scan.nextInt();
-            array[k++] = enterNumber;
-            if (enterNumber < count) {
+            array[count++] = enterNumber;
+            if (enterNumber < number) {
                 System.out.println("Your number is too small. Please. try again...");
-            } else if (enterNumber > count) {
+            } else if (enterNumber > number) {
                 System.out.println("Your number is too big. Please, try again...");
             } else {
-                int[] guessArray = Arrays.copyOf(array, k);
+                int[] guessArray = Arrays.copyOf(array, count);
                 Arrays.sort(guessArray);
                 print(name, guessArray);
                 break;
