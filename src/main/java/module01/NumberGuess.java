@@ -21,11 +21,11 @@ public class NumberGuess {
         int count = 0;
         while (true) {
             System.out.print("Enter number: ");
-            int enterNumber = scan.nextInt();
-            array[count++] = enterNumber;
-            if (enterNumber < number) {
+            int enteredNumber = scan.nextInt();
+            array[count++] = enteredNumber;
+            if (enteredNumber < number) {
                 System.out.println("Your number is too small. Please. try again...");
-            } else if (enterNumber > number) {
+            } else if (enteredNumber > number) {
                 System.out.println("Your number is too big. Please, try again...");
             } else {
                 int[] guessArray = Arrays.copyOf(array, count);

@@ -9,18 +9,18 @@ public class ShipBattle {
         String[][] arr = new String[5][5];
         start(arr);
         Random random = new Random();
-        int row = random.nextInt(5);
-        int column = random.nextInt(5);
+        int targetRow = random.nextInt(5);
+        int targetColumn = random.nextInt(5);
         System.out.println("All set. Get ready to rumble!");
         while (true) {
-            int entRow = getValidInput(scan, "Enter row number: ", 1, 5) - 1;
-            int entColumn = getValidInput(scan, "Enter column number: ", 1, 5) - 1;
-            if (entRow == row && entColumn == column) {
+            int row = getValidInput(scan, "Enter row number: ", 1, 5) - 1;
+            int column = getValidInput(scan, "Enter column number: ", 1, 5) - 1;
+            if (row == targetRow && column == targetColumn) {
                 System.out.println("You have won!");
-                arr[row][column] = "X";
+                arr[targetRow][targetColumn] = "X";
                 break;
             } else {
-                arr[entRow][entColumn] = "*";
+                arr[row][column] = "*";
             }
             print(arr);
         }
