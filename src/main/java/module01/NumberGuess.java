@@ -38,8 +38,8 @@ public class NumberGuess {
 
     public static void print(String name, int[] guessArray) {
         System.out.print("Your numbers: ");
-        for (int i : guessArray) {
-            System.out.print(i + " ");
+        for (int i = guessArray.length - 1; i >= 0; i--) {
+            System.out.print(guessArray[i] + " ");
         }
         System.out.printf("\nCongratulations, %s!", name);
     }
