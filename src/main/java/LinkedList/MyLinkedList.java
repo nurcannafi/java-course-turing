@@ -74,8 +74,8 @@ public class MyLinkedList<T> {
             }
             newNode.next = temp.next;
             temp.next = newNode;
+            size++;
         }
-        size++;
     }
 
     public void update(int index, T value) {
@@ -106,7 +106,7 @@ public class MyLinkedList<T> {
     }
 
     public void delete(T object) {
-        if (head == null) {
+        if (head == null || object == null) {
             return;
         }
         if (head.data.equals(object)) {
