@@ -1,132 +1,141 @@
 package LinkedList;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class MyLinkedList<T> {
+
     private Node<T> head;
     private int size;
 
-    MyLinkedList() {
-        head = null;
-        size = 0;
-    }
-
-    public void addHead(T value) {
-        Node<T> newNode = new Node<T>(value);
-        newNode.next = head;
+    public T addHead(final T value) {
+        final Node<T> newNode = new Node<T>(value);
+        newNode.setNext(head);
         head = newNode;
         size++;
+        return value;
     }
 
-    public void addTail(T value) {
-        Node<T> newNode = new Node<T>(value);
+    public T addTail(final T value) {
+        final Node<T> newNode = new Node<T>(value);
         if (head == null) {
             head = newNode;
         } else {
             Node<T> temp = head;
-            while (temp.next != null) {
-                temp = temp.next;
+            for (int i = 0; i < size - 1; i++) {
+                temp = temp.getNext();
             }
-            temp.next = newNode;
+            temp.setNext(newNode);
         }
         size++;
+        return value;
     }
 
-    public T removeHead() {
+    public Optional<T> removeHead() {
         if (head == null) {
-            return null;
+            return Optional.empty();
         }
-        T data = head.data;
-        head = head.next;
+        T data = head.getData();
+        head = head.getNext();
         size--;
-        return data; //silinen deyeri return edir
+        return Optional.of(data);
     }
 
-    public T removeTail() {
+    public Optional<T> removeTail() {
         if (head == null) {
-            return null;
+            return Optional.empty();
         }
-        if (head.next == null) {
-            T data = head.data;
+        if (head.getNext() == null) {
+            T data = head.getData();
             head = null;
             size--;
-            return data;
+            return Optional.of(data);
         }
         Node<T> temp = head;
-        while (temp.next.next != null) {
-            temp = temp.next;
+        while (temp.getNext().getNext() != null) {
+            temp = temp.getNext();
         }
-        T data = temp.next.data;
-        temp.next = null;
+        T data = temp.getNext().getData();
+        temp.setNext(null);
         size--;
-        return data;
+        return Optional.of(data);
     }
 
-    public void insert(int index, T value) {
+    public T insert(final int index, final T value) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index is out of bounds");
+            throw new IllegalArgumentException("Index is out of bounds");
         }
-        Node<T> newNode = new Node(value);
+        Node<T> newNode = new Node<>(value);
         if (index == 0) {
             addHead(value);
         } else {
             Node<T> temp = head;
             for (int i = 0; i < index - 1; i++) {
-                temp = temp.next;
+                temp = temp.getNext();
             }
-            newNode.next = temp.next;
-            temp.next = newNode;
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
             size++;
         }
+        return value;
     }
 
-    public void update(int index, T value) {
+    public T update(final int index, final T value) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index is out of bounds");
+            throw new IllegalArgumentException("Index is out of bounds");
         }
         Node<T> temp = head;
         for (int i = 0; i < index; i++) {
-            temp = temp.next;
+            temp = temp.getNext();
         }
-        temp.data = value;
+        temp.setData(value);
+        return value;
     }
 
-    public void delete(int index) {
+    public T delete(final int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index is out of bounds");
+            throw new IllegalArgumentException("Index is wrong");
         }
+        T data;
         if (index == 0) {
-            head = head.next;
+            data = head.getData();
+            head = head.getNext();
         } else {
             Node<T> temp = head;
             for (int i = 0; i < index - 1; i++) {
-                temp = temp.next;
+                temp = temp.getNext();
             }
-            temp.next = temp.next.next;
+            data = temp.getNext().getData();
+            temp.setNext(temp.getNext().getNext());
         }
         size--;
+        return data;
     }
 
-    public void delete(T object) {
+    public T delete(final T object) {
         if (head == null || object == null) {
-            return;
+            throw new IllegalArgumentException("Index is wrong");
         }
-        if (head.data.equals(object)) {
-            head = head.next;
+        if (head.getData().equals(object)) {
+            head = head.getNext();
             size--;
-            return;
+        } else {
+            Node<T> temp = head;
+            while (temp.getNext() != null && !temp.getNext().getData().equals(object)) {
+                temp = temp.getNext();
+            }
+            if (temp.getNext() != null) {
+                temp.setNext(temp.getNext().getNext());
+                size--;
+            }
         }
-        Node<T> temp = head;
-        while (temp.next != null && !temp.next.data.equals(object)) {
-            temp = temp.next;
-        }
-        if (temp.next != null) {
-            temp.next = temp.next.next;
-            size--;
-        }
+        return object;
     }
 
-    public void deleteAll() {
+    public MyLinkedList<T> deleteAll() {
         head = null;
         size = 0;
+        return this;
     }
 
     public Object[] toArray() {
@@ -134,8 +143,8 @@ public class MyLinkedList<T> {
         int index = 0;
         Node<T> temp = head;
         while (temp != null) {
-            array[index++] = temp.data;
-            temp = temp.next;
+            array[index++] = temp.getData();
+            temp = temp.getNext();
         }
         return array;
     }
@@ -145,12 +154,38 @@ public class MyLinkedList<T> {
         StringBuilder sb = new StringBuilder();
         Node<T> temp = head;
         while (temp != null) {
-            sb.append(temp.data);
-            if (temp.next != null) {
+            sb.append(temp.getData());
+            if (temp.getNext() != null) {
                 sb.append(" --> ");
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyLinkedList<?> that = (MyLinkedList<?>) o;
+
+        if (size != that.size) return false;
+        Node<T> currentThis = this.head;
+        Node<?> currentThat = that.head;
+
+        while (currentThis != null && currentThat != null) {
+            if (!Objects.equals(currentThis.getData(), currentThat.getData())) {
+                return false;
+            }
+            currentThis = currentThis.getNext();
+            currentThat = currentThat.getNext();
+        }
+
+        return currentThis == null && currentThat == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(head, size);
     }
 }
