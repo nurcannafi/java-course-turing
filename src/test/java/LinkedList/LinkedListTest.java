@@ -1,30 +1,30 @@
-package module01;
+package LinkedList;
 
+import LinkedList.MyLinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LinkedListTest {
 
-    LinkedList<String> list = new LinkedList<>();
+    MyLinkedList<String> list = new MyLinkedList<>();
 
     @BeforeEach
     void setUp() {
-        list = new LinkedList<>();
-        list.add("Harry");
-        list.add("Harmonie");
-        list.add("Ron");
+        list = new MyLinkedList<>();
+        list.addHead("Ron");
+        list.addHead("Harmonie");
+        list.addHead("Harry");
     }
 
     @Test
     void addTest() {
-        LinkedList<String> list1 = new LinkedList<>();
-        list.add("Harry");
-        list.add("Harmonie");
-        list.add("Ron");
+        MyLinkedList<String> list1 = new MyLinkedList<>();
+        list1.addHead("Ron");
+        list1.addHead("Harmonie");
+        list1.addHead("Harry");
 
         assertEquals(list, list1);
     }
