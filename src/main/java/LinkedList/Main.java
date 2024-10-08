@@ -3,24 +3,19 @@ package LinkedList;
 import java.util.Arrays;
 
 public class Main {
+
     public static void main(String[] args) {
         MyLinkedList<Integer> list = new MyLinkedList<>();
-        list.addHead(5);
-        list.addHead(73);
-        list.addTail(3);
-        list.addTail(13);
-        list.addTail(27);
-        list.addTail(31);
-        list.addTail(49);
-        list.addHead(7);
-        System.out.println(list);
+        list.addHead(3);
+        list.addHead(2);
+        list.addHead(1);
+        list.addTail(4);
+        list.addTail(6);
+        list.update(4, 5);
+        list.insert(5, 6);
         list.removeHead();
-        list.removeTail();
-        list.insert(1, 51);
-        list.update(2, 9);
-        System.out.println(list);
         list.delete(3);
-        list.delete(Integer.valueOf(13));
+        System.out.println(list);
         Object[] array = list.toArray();
         System.out.println(Arrays.toString(array));
 
