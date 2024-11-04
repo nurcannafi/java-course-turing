@@ -1,47 +1,111 @@
-create table users(
-	user_id serial primary key,
-	username varchar(30) not null UNIQUE,
-	email varchar(30) not null check(email like'%_@_%._%'),
-	password varchar(30) not null check(length(password) >= 8),
-	created_at timestamp default current_timestamp,
-	updated_at timestamp default current_timestamp
-);
+CREATE TABLE users
+  (
+     id         SERIAL PRIMARY KEY,
+     username   VARCHAR(30) NOT NULL UNIQUE,
+     password   VARCHAR(30) NOT NULL CHECK(Length(password)>=8),
+     email      VARCHAR(30) NOT NULL UNIQUE,
+     status     VARCHAR(30) NOT NULL DEFAULT 'active',
+     role       VARCHAR(10) NOT NULL DEFAULT 'user',
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_by INT REFERENCES users(id),
+     updated_by INT REFERENCES users(id)
+  );
 
-create table posts(
-	post_id serial primary key,
-	user_id serial references users(user_id),
-	title varchar(30) not null,
-	content text not null,
-	created_at timestamp default current_timestamp,
-	updated_at timestamp default current_timestamp
-);
+CREATE TABLE posts
+  (
+     id          SERIAL PRIMARY KEY,
+     title       VARCHAR(255) NOT NULL,
+     content     TEXT NOT NULL,
+     views_count INT DEFAULT 0,
+     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_by  INT NOT NULL REFERENCES users(id),
+     updated_by  INT REFERENCES users(id)
+  );
 
-create table comments(
-	comment_id serial primary key,
-	user_id serial references users(user_id),
-	post_id serial references posts(post_id),
-	content text not null,
-	created_at timestamp default current_timestamp,
-	updated_at timestamp default current_timestamp
-);
+CREATE TABLE comments
+  (
+     id         SERIAL PRIMARY KEY,
+     content    TEXT NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_by INT NOT NULL REFERENCES users(id),
+     updated_by INT REFERENCES users(id),
+     user_id    INT REFERENCES users(id),
+     post_id    INT REFERENCES posts(id)
+  );
 
-insert into users(username, email, password, created_at, updated_at)
-values
-    ('nurcan123', 'nafi@gmail.com', '12341234', '2024-10-31 16:03:57', '2024-10-31 16:04:03')
-    ('user456', 'user456@gmail.com', '12345678', '2024-10-15 16:04:17', '2024-10-15 16:04:24'),
-    ('jane_doe', 'jane.doe@gmail.com', '7834589302', '2024-10-15 16:04:40', '2024-10-15 16:04:54');
+CREATE TABLE likes
+  (
+     id         SERIAL PRIMARY KEY,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_by INT NOT NULL REFERENCES users(id),
+     updated_by INT REFERENCES users(id),
+     user_id    INT UNIQUE REFERENCES users(id),
+     post_id    INT UNIQUE REFERENCES posts(id),
+     comment_id INT UNIQUE REFERENCES comments(id)
+  );
 
-update users set password=97794227 where user_id=2;
+SELECT p.id        post_id,
+       p.title     post_title,
+       p.content   post_content,
+       p.views_count,
+       p.created_at,
+       p.updated_at,
+       u1.username created_by,
+       u2.username updated_by
+FROM   posts p
+       LEFT JOIN users u1
+              ON p.created_by = u1.id
+       LEFT JOIN users u2
+              ON p.updated_by = u1.id;
 
-INSERT INTO posts (user_id, title, content, created_at, updated_at)
-VALUES
-    (1, 'First Post', 'This is the content of the first post.', '2024-10-31 16:30:00', '2024-10-31 16:30:00'),
-    (2, 'Second Post', 'Content for the second post goes here.', '2024-10-31 16:35:00', '2024-10-31 16:35:00'),
-    (3, 'Third Post', 'Here is the third post content.', '2024-10-31 16:40:00', '2024-10-31 16:40:00');
+SELECT c.id        comment_id,
+       c.created_at,
+       c.updated_at,
+       u1.username created_by_user,
+       u2.username updated_by_user,
+       p.title     post_title
+FROM   comments c
+       JOIN users u1
+         ON c.created_by = u1.id
+       JOIN users u2
+         ON c.updated_by = u2.id
+       JOIN posts p
+         ON c.post_id = p.id;
 
-INSERT INTO comments (user_id, post_id, content, created_at, updated_at)
-VALUES
-    (1, 1, 'This is a comment on the first post.', '2024-10-31 16:32:00', '2024-10-31 16:32:00'),
-    (2, 1, 'Another comment on the first post.', '2024-10-31 16:37:00', '2024-10-31 16:37:00'),
-    (3, 2, 'This is a comment on the second post.', '2024-10-31 16:42:00', '2024-10-31 16:42:00');
+SELECT p.id        post_id,
+       p.title,
+       Count(l.id) like_count
+FROM   posts p
+       LEFT JOIN likes l
+              ON p.id = l.post_id
+GROUP  BY p.id;
+
+SELECT c.id        comment_id,
+       p.id        post_id,
+       Count(l.id) like_count
+FROM   comments c
+       LEFT JOIN posts p
+              ON c.post_id = p.id
+       LEFT JOIN likes l
+              ON c.id = l.comment_id
+GROUP  BY c.id,
+          p.id;
+
+SELECT u.username,
+       p.title   liked_post,
+       c.content liked_comment
+FROM   users u
+       LEFT JOIN likes l
+              ON u.id = l.user_id
+       LEFT JOIN posts p
+              ON l.post_id = p.id
+       LEFT JOIN comments c
+              ON l.comment_id = c.id;
+
+
+
 
