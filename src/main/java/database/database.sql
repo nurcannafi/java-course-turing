@@ -45,8 +45,11 @@ CREATE TABLE likes
      updated_by INT REFERENCES users(id),
      user_id    INT UNIQUE REFERENCES users(id),
      post_id    INT UNIQUE REFERENCES posts(id),
-     comment_id INT UNIQUE REFERENCES comments(id)
+     comment_id INT UNIQUE REFERENCES comments(id),
+     CHECK (post_id IS NOT NULL AND comment_id IS NULL OR post_id IS NULL AND
+     comment_id IS NOT NULL)
   );
+
 
 SELECT p.id        post_id,
        p.title     post_title,
