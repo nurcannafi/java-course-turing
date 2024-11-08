@@ -19,14 +19,14 @@ public class DatabaseConnection {
                     " email VARCHAR(50) UNIQUE NOT NULL)";
             System.out.println("table created or already exists: " + createTable(connection, "users",
                     tableDefinition));
-//
-//            System.out.println("New user id: " + insertUser(connection, "tester", "12345678",
-//                    "testuser@gmail.com"));
-//
-//            System.out.println("Updated rows count: " + updateUserStatus(connection, "tester",
-//                    "inactive"));
-//
-//            System.out.println("Deleted rows count: " + deleteUser(connection, 4));
+
+            System.out.println("New user id: " + insertUser(connection, "tester", "12345678",
+                    "testuser@gmail.com"));
+
+            System.out.println("Updated rows count: " + updateUserStatus(connection, "tester",
+                    "inactive"));
+
+            System.out.println("Deleted rows count: " + deleteUser(connection, 4));
         } catch (Exception e) {
             e.printStackTrace();
         }
