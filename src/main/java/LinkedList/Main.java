@@ -3,6 +3,7 @@ package LinkedList;
 import java.util.Arrays;
 
 public class Main {
+
     public static void main(String[] args) {
         MyLinkedList<Integer> list = new MyLinkedList<>();
         list.addHead(5);

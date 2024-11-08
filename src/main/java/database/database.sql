@@ -60,6 +60,36 @@ CREATE TABLE comment_likes
      UNIQUE(user_id, comment_id)
   );
 
+INSERT INTO users
+            (username,
+             password,
+             email,
+             status,
+             role,
+             created_by,
+             updated_by)
+VALUES      ('johndoe',
+             'securePass123',
+             'johndoe@example.com',
+             'active',
+             'user',
+             1,
+             1),
+            ('janedoe',
+             'strongPass456',
+             'janedoe@example.com',
+             'inactive',
+             'admin',
+             2,
+             2),
+            ('michael',
+             'password789',
+             'michael@example.com',
+             'active',
+             'user',
+             1,
+             3);
+
 SELECT p.id        post_id,
        p.title     post_title,
        p.content   post_content,
