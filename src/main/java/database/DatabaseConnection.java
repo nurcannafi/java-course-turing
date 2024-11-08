@@ -15,19 +15,33 @@ public class DatabaseConnection {
 
     public static void main(String[] args) {
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
-            System.out.println("New user id: " + insertUser(connection, "tester", "12345678",
-                    "testuser@gmail.com"));
-            System.out.println("Updated rows count: " + updateUserStatus(connection, "tester",
-                    "inactive"));
-            System.out.println("Deleted rows count: " + deleteUser(connection, 4));
-
             String tableDefinition = "(id SERIAL PRIMARY KEY, username VARCHAR(30) UNIQUE NOT NULL," +
                     " email VARCHAR(50) UNIQUE NOT NULL)";
             System.out.println("table created or already exists: " + createTable(connection, "users",
                     tableDefinition));
+//
+//            System.out.println("New user id: " + insertUser(connection, "tester", "12345678",
+//                    "testuser@gmail.com"));
+//
+//            System.out.println("Updated rows count: " + updateUserStatus(connection, "tester",
+//                    "inactive"));
+//
+//            System.out.println("Deleted rows count: " + deleteUser(connection, 4));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean createTable(Connection connection, String tableName, String tableDefinition) {
+        String query = "CREATE TABLE IF NOT EXISTS " + tableName + tableDefinition;
+
+        try (Statement statement = connection.createStatement()) {
+           statement.executeQuery(query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static int insertUser(Connection connection, String username, String password, String email) {
@@ -70,18 +84,6 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
         return 0;
-    }
-
-    public static boolean createTable(Connection connection, String tableName, String tableDefinition) {
-        String query = "CREATE TABLE IF NOT EXISTS " + tableName + tableDefinition;
-
-        try (Statement statement = connection.createStatement()) {
-            int res = statement.executeUpdate(query);
-            return res == 0 || res == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
 }
